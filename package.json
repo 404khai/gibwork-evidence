@@ -1,0 +1,16 @@
+{
+  "name": "gibwork-evidence",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Create reproducible local evidence packets for GibWork coding bounties.",
+  "engines": { "node": ">=22.18" },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "demo": "npm run build && node scripts/demo.mjs"
+  },
+  "dependencies": { "@gibwork/sdk": "0.2.0" },
+  "devDependencies": { "@types/node": "^22.0.0", "typescript": "^5.9.0" }
+}

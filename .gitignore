@@ -1,0 +1,10 @@
+node_modules/
+dist/
+demo-output/
+*.cast
+*.mp4
+*.png
+.env*
+*.key
+*keypair*
+.render-venv/

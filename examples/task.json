@@ -1,0 +1,27 @@
+{
+  "id": "00000000-0000-4000-8000-000000000001",
+  "slug": "offline-evidence-demo",
+  "title": "OFFLINE FIXTURE: implement integer addition with regression evidence",
+  "content": "<p>Demonstration task, not a live paid listing. Supply source, a passing test log and a demo recording.</p>",
+  "tags": ["Development"],
+  "primarySkill": { "slug": "typescript", "label": "TypeScript" },
+  "createdAt": "2026-10-01T00:00:00.000Z",
+  "deadline": null,
+  "status": "OPEN",
+  "isOpen": true,
+  "isFeatured": false,
+  "asset": {
+    "id": "synthetic-usdc",
+    "mintAddress": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "symbol": "USDC",
+    "imageUrl": null,
+    "amount": 1000,
+    "price": 1,
+    "decimals": 6
+  },
+  "user": { "id": "synthetic-creator", "username": "fixture" },
+  "media": [],
+  "minSubmissionAmount": 50,
+  "allowOnlyVerifiedSubmissions": false,
+  "allowOnlyDiscordGuildSubmissions": false
+}
