@@ -8,3 +8,4 @@ demo-output/
 *.key
 *keypair*
 .render-venv/
+.DS_Store

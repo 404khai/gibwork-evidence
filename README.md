@@ -4,6 +4,8 @@ A terminal tool for turning a coding-bounty implementation into a reviewable evi
 
 Built for the GibWork Developer Hackathon by 404khai, with OpenAI Codex assistance. The demo and tests use offline fixtures. No live wallet, payment, submission or production acceptance has been verified.
 
+[Demo video and screenshot](https://github.com/404khai/gibwork-evidence/releases/tag/v0.1.0) · [Requirements critique](REQUIREMENTS_AUDIT.md) · [Live test prerequisites](LIVE_TESTS.md)
+
 ## Run the free offline demo
 
 Requires Node.js 22.18+ (tested with Node 26.5), npm and Git. No account, wallet, credentials, paid API or running server is needed.
@@ -87,7 +89,16 @@ node dist/cli.js verify --packet /absolute/path/to/new-packet
 }
 ```
 
-Capture the actual test output after pinning the commit. Logs may live in a Git-ignored evidence directory; they are hashed and copied into the packet but not represented as committed source. The CLI does not execute commands in a plan or task. Check commands, exit codes, commit identities and requirement mappings are author-provided assertions, explicitly labeled that way. A reviewer must evaluate their authenticity and scope coverage. A checksum cannot prove that a test ran.
+Capture the actual test output after pinning the commit. For an explicit owner-selected command, the CLI can record a local execution receipt:
+
+```sh
+node dist/cli.js capture --repo /absolute/path/to/implementation \
+  --out /absolute/path/to/new-capture -- node --test
+```
+
+This writes `checks.log` and `receipt.json`, recording argv, actual exit, timeout/error state, log digest, and Git state before/after. It uses no shell, caps output at 1 MiB, and times out after 30 seconds. The output must be outside the implementation checkout or Git-ignored. Copy these into an ignored evidence directory and include the receipt as an artifact; fill the plan using the recorded facts. Capture exits 2 for a failed, interrupted or dirty run. The demo uses this runner for its regression cases.
+
+Logs may live in a Git-ignored evidence directory; they are hashed and copied into the packet but not represented as committed source. The CLI does not execute commands in a plan or task. Check commands, exit codes, commit identities and requirement mappings are author-provided assertions, explicitly labeled that way. A local receipt is unsigned, editable and not automatically trusted by the packager. A reviewer must evaluate authenticity and scope coverage. A checksum cannot prove that a test ran. Capture is not a sandbox; see the critique for its limits.
 
 `pack` exits **0** for evidence ready for human review, **2** for a packet with review blockers, and **1** for a failure that prevented packing. `verify` exits **0** when the saved bytes match, **1** on failure. A fixture or stage task always produces a review blocker. An existing output directory is never overwritten.
 
@@ -126,9 +137,9 @@ Requirement mappings are explicit because arbitrary task prose cannot safely be 
 
 ## Hackathon deliverables and status
 
-This is a new non-web workflow: reproducible coding evidence handoff and verification, rather than a general bounty browser, marketplace dashboard or payment wrapper. Organizers still need to confirm novelty against other entries.
+The proposed non-web workflow is reproducible coding evidence handoff and verification. Organizers still need to confirm novelty against other entries and that the task-read integration satisfies their core SDK requirement.
 
-The repository supplies TypeScript source, SDK integration, tests, setup instructions and a reproducible terminal demo. A terminal-output demo video, screenshot and example packet are prepared separately for review. Public repository/video URLs and required attendance at two Discord sessions remain submission items. Do not claim sessions you have not attended.
+The repository supplies TypeScript source, SDK integration, tests, setup instructions and a reproducible terminal demo. Public video, screenshot, recording and example-packet downloads are in the linked release. Live validation and required attendance at two Discord sessions remain submission items. Do not claim sessions you have not attended.
 
 ## Dependencies and attribution
 

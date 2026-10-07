@@ -8,13 +8,17 @@ The included offline demo runs three real regression cases in a synthetic implem
 
 Implemented with OpenAI Codex assistance. Reviewed and locally tested. No paid API, key export, gas spend, deposit or participation fee was used.
 
-Validation: `npm test` (16 passing tests), `npm run typecheck`, `npm run demo` (3 real regression tests in the synthetic implementation), independent CLI pack/verify, and visual inspection of the 20-second H.264 terminal replay (1280 × 1000). The screenshot, video and portable example packet are local artifacts; public URLs remain pending publication.
+Source: https://github.com/404khai/gibwork-evidence
+
+Demo video, screenshot, terminal recording and portable example packet: https://github.com/404khai/gibwork-evidence/releases/tag/v0.1.0
+
+Validation: `npm test` (20 passing tests), `npm run typecheck`, `npm run demo` (3 real regression tests in the synthetic implementation with a local execution receipt), independent CLI pack/verify, and visual inspection of the 20-second H.264 terminal replay (1280 × 1000). See `REQUIREMENTS_AUDIT.md` for the candid requirements assessment, including the thin single-read SDK integration and lack of live validation.
 
 Deliverable checklist before posting:
 
 - [ ] Organizer confirms this scope is distinct from existing entries.
-- [ ] Public source repository URL (publication pending review).
-- [ ] Demo video URL and screenshot (local assets prepared separately).
+- [x] Public source repository URL.
+- [x] Demo video URL, screenshot and exported example packet.
 - [ ] Attend and truthfully record two required Discord sessions.
 - [ ] Confirm Nigeria payout eligibility and actual Solana receiving setup.
 - [ ] Confirm a fee-free submission route; current SDK docs quote 0.15 USDC.

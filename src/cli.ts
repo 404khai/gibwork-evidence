@@ -1,9 +1,10 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { fixtureTaskReader, liveTaskReader, readTask } from './task.js';
 import { packEvidence, validatePlan, verifyPacket } from './pack.js';
+import { captureCheck } from './capture.js';
 
 const terminalText = (text: string): string => text.replace(/[\x00-\x1f\x7f]/g, ' ');
 
@@ -12,13 +13,24 @@ async function main(): Promise<void> {
     allowPositionals: true,
     options: Object.fromEntries(['task', 'fixture', 'adapter', 'environment', 'repo', 'plan', 'out', 'packet'].map(k => [k, { type: 'string' as const }])),
   });
+  if (positionals[0] === 'capture' && values.repo && values.out && positionals.length > 1) {
+    const out = path.resolve(values.out);
+    // Reserve the output before running. It must be outside or Git-ignored in the checkout.
+    await mkdir(out);
+    const { receipt, log } = await captureCheck(values.repo, positionals.slice(1));
+    await writeFile(path.join(out, 'checks.log'), log, { flag: 'wx' });
+    await writeFile(path.join(out, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx' });
+    console.log(`Captured exit: ${receipt.exitCode}; clean stable checkout: ${receipt.cleanStableCheckout}\nReceipt: ${terminalText(out)}/receipt.json`);
+    process.exitCode = receipt.exitCode === 0 && !receipt.runnerError && receipt.cleanStableCheckout ? 0 : 2;
+    return;
+  }
   if (positionals[0] === 'verify' && values.packet) {
     await verifyPacket(values.packet);
     console.log('PASS: packet bytes match the saved integrity index (not a cryptographic author signature).');
     return;
   }
   if (positionals[0] !== 'pack' || !values.task || Boolean(values.fixture) === Boolean(values.adapter) || !values.repo || !values.plan || !values.out) {
-    throw new Error('Usage: node dist/cli.js pack --task UUID (--fixture task.json | --adapter trusted-signer.mjs) --repo DIR --plan evidence.json --out NEW_DIR [--environment stage|production]\n       node dist/cli.js verify --packet DIR');
+    throw new Error('Usage: node dist/cli.js pack --task UUID (--fixture task.json | --adapter trusted-signer.mjs) --repo DIR --plan evidence.json --out NEW_DIR [--environment stage|production]\n       node dist/cli.js verify --packet DIR\n       node dist/cli.js capture --repo DIR --out NEW_DIR -- COMMAND ARGS');
   }
   if (values.environment && !['stage', 'production'].includes(values.environment)) throw new Error('Environment must be stage or production');
   const plan = validatePlan(JSON.parse(await readFile(values.plan, 'utf8')));
